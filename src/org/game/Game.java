@@ -3,7 +3,6 @@ package org.game;
 import org.graphics.Renderer;
 import org.object.Platform;
 import org.object.Player;
-import org.test.TestSprite;
 import org.world.World;
 
 /**
@@ -19,9 +18,9 @@ public class Game {
 		Renderer.init();
 		
 		World.currentWorld = new World();
-		World.currentWorld.sprites.add(new Player(100, 100)); 
-		World.currentWorld.sprites.add(new Platform(200,200));
-		World.currentWorld.sprites.add(new TestSprite(500,300));
+		World.currentWorld.addSprite(new Player(100, 100)); 
+		World.currentWorld.addSprite(new Platform(200,200, 300, 20));
+		//World.currentWorld.sprites.add(new TestSprite(500,300));
 	}
 	
 	public static void quit() {

@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
+import org.graphics.Animation;
+import org.graphics.Renderer;
 import org.input.Input;
 import org.world.World;
 
@@ -21,9 +24,20 @@ public class Player extends Mob {
 
 	public Player(float posX, float posY) {
 		super(posX, posY);
-		width = 16;
-		height = 16;
+		width = 24;
+		height = 32;
 		runSpeed = 100;
+		
+		Animation anim = new Animation();
+		try {
+			anim.images.add(Renderer.loadImage("/resources/image/player.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		animations = new Animation[] {
+				 anim
+		};
+		
 	}
 
 	public void update(float deltaTime) {
@@ -40,7 +54,7 @@ public class Player extends Mob {
 		velocityY += gravity * deltaTime;
 		
 		if(doesCollide(posX, posY + 1)) {
-		if(Input.getKey(KeyEvent.VK_UP)) {
+		if(Input.getKeyDown(KeyEvent.VK_UP)) {
 			velocityY = (float) -Math.sqrt((2 * jumpHeight * gravity));
 		}
 		}
@@ -56,8 +70,17 @@ public class Player extends Mob {
 		
 		//END COLLISONS
 		
+		if(Input.getKeyDown(KeyEvent.VK_S)) {
+			Bullet bullet = new Bullet(posX, posY, 0);
+			World.currentWorld.addSprite(bullet);
+			
+		}
+		
 		posX += moveX * deltaTime;
 		posY += velocityY * deltaTime;
+		
+		Renderer.camX = posX;
+		Renderer.camY = 100;
 	}
 	
 	private boolean doesCollide(float x, float y) {
@@ -68,7 +91,7 @@ public class Player extends Mob {
 		
 		for (Sprite sprite: World.currentWorld.sprites) {
 			
-			if(sprite == this) {
+			if(sprite == this || !sprite.isSolid) {
 				continue;
 			}
 			float otherLeft = sprite.posX - sprite.width /2;
@@ -84,8 +107,8 @@ public class Player extends Mob {
 		
 	}
 	
-	public void render(Graphics g) {
-		g.setColor(Color.blue);
-		g.drawRect((int) (posX - width / 2), (int) (posY - height / 2), (int) width, (int) height);
-	}
+//	public void render(Graphics g) {
+//		g.setColor(Color.blue);
+//		g.drawRect((int) (posX - width / 2), (int) (posY - height / 2), (int) width, (int) height);
+//	}
 }
