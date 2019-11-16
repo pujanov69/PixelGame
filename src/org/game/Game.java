@@ -1,6 +1,7 @@
 package org.game;
 
 import org.graphics.Renderer;
+import org.object.BadGuy;
 import org.object.Platform;
 import org.object.Player;
 import org.world.World;
@@ -20,7 +21,7 @@ public class Game {
 		World.currentWorld = new World();
 		World.currentWorld.addSprite(new Player(100, 100)); 
 		World.currentWorld.addSprite(new Platform(200,200, 300, 20));
-		//World.currentWorld.sprites.add(new TestSprite(500,300));
+		World.currentWorld.addSprite(new BadGuy(200,100));
 	}
 	
 	public static void quit() {

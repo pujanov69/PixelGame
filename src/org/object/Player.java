@@ -22,6 +22,8 @@ public class Player extends Mob {
 	private float gravity = 300.0f;
 	private float jumpHeight = 50;
 
+	private int direction = 1;
+	
 	public Player(float posX, float posY) {
 		super(posX, posY);
 		width = 24;
@@ -51,6 +53,13 @@ public class Player extends Mob {
 			moveX += runSpeed;
 		}
 		
+		if(moveX > 0) {
+			direction = 1;
+		}
+		if(moveX < 0) {
+			direction = -1;
+		}
+		
 		velocityY += gravity * deltaTime;
 		
 		if(doesCollide(posX, posY + 1)) {
@@ -71,7 +80,7 @@ public class Player extends Mob {
 		//END COLLISONS
 		
 		if(Input.getKeyDown(KeyEvent.VK_S)) {
-			Bullet bullet = new Bullet(posX, posY, 0);
+			Bullet bullet = new Bullet(posX, posY, direction);
 			World.currentWorld.addSprite(bullet);
 			
 		}
@@ -83,29 +92,7 @@ public class Player extends Mob {
 		Renderer.camY = 100;
 	}
 	
-	private boolean doesCollide(float x, float y) {
-		float myLeft = x - width /2;
-		float myRight = x + width / 2;
-		float myUp = y - height /2;
-		float myDown = y + height /2;
-		
-		for (Sprite sprite: World.currentWorld.sprites) {
-			
-			if(sprite == this || !sprite.isSolid) {
-				continue;
-			}
-			float otherLeft = sprite.posX - sprite.width /2;
-			float otherRight = sprite.posX + sprite.width / 2;
-			float otherUp = sprite.posY - sprite.height /2;
-			float otherDown = sprite.posY + sprite.height /2;
-			
-			if(myLeft < otherRight && myRight > otherLeft && myUp < otherDown && myDown > otherUp) {
-				return true;
-			}
-		}
-		return false; 
-		
-	}
+	
 	
 //	public void render(Graphics g) {
 //		g.setColor(Color.blue);

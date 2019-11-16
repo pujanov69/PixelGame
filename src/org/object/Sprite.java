@@ -2,9 +2,11 @@ package org.object;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import org.graphics.Animation;
 import org.graphics.Renderer;
+import org.world.World;
 
 /**
 *@author Pujan
@@ -55,5 +57,56 @@ public class Sprite {
 		
 		g.drawImage(image, realX, realY, image.getWidth(), image.getHeight(), null);
 	}
+	
+	protected boolean doesCollide(float x, float y) {
+		float myLeft = x - width /2;
+		float myRight = x + width / 2;
+		float myUp = y - height /2;
+		float myDown = y + height /2;
+		
+		for (Sprite sprite: World.currentWorld.sprites) {
+			
+			if(sprite == this || !sprite.isSolid) {
+				continue;
+			}
+			float otherLeft = sprite.posX - sprite.width /2;
+			float otherRight = sprite.posX + sprite.width / 2;
+			float otherUp = sprite.posY - sprite.height /2;
+			float otherDown = sprite.posY + sprite.height /2;
+			
+			if(myLeft < otherRight && myRight > otherLeft && myUp < otherDown && myDown > otherUp) {
+				return true;
+			}
+		}
+		return false; 
+		
+	}
 
+	//Specific collisions
+	protected Sprite[] getColliders(float x, float y) {
+		ArrayList<Sprite> sprites = new ArrayList<Sprite>();
+		
+		float myLeft = x - width /2;
+		float myRight = x + width / 2;
+		float myUp = y - height /2;
+		float myDown = y + height /2;
+		
+		for (Sprite sprite: World.currentWorld.sprites) {
+			
+			if(sprite == this || !sprite.isSolid) {
+				continue;
+			}
+			float otherLeft = sprite.posX - sprite.width /2;
+			float otherRight = sprite.posX + sprite.width / 2;
+			float otherUp = sprite.posY - sprite.height /2;
+			float otherDown = sprite.posY + sprite.height /2;
+			
+			if(myLeft < otherRight && myRight > otherLeft && myUp < otherDown && myDown > otherUp) {
+				sprites.add(sprite);
+			}
+		}
+		Sprite[] spriteArray = new Sprite[sprites.size()];
+		return sprites.toArray(spriteArray); 
+		
+	}
 }
